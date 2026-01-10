@@ -59,6 +59,12 @@ const Home = () => {
                   transition={{ delay: 0.2 }}
                   className="inline-block bg-white text-black px-10 py-4 rounded-full font-bold text-lg hover:bg-neutral-200 transition-colors"
                   data-cursor="hover"
+                  // onClick={() => {
+                  //   window.gtag("event", "contact_click", {
+                  //     event_category: "engagement",
+                  //     event_label: "Get in Touch Button",
+                  //   });
+                  // }}
                 >
                   Get in Touch
                 </motion.a>

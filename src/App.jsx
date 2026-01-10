@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Lenis from "lenis";
 import Home from "./pages/Home";
 import NoiseOverlay from "./components/ui/NoiseOverlay";
+import AnalyticsTracker from "./components/AnalyticsTracker";
 
 function App() {
   useEffect(() => {
@@ -28,6 +29,7 @@ function App() {
 
   return (
     <Router>
+      <AnalyticsTracker />
       <NoiseOverlay />
       <Routes>
         <Route path="/" element={<Home />} />
