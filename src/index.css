@@ -1,0 +1,824 @@
+@import "tailwindcss";
+
+:root {
+  --background: 0 0% 3%;
+  --foreground: 0 0% 98%;
+}
+
+/* Tech Stack Badges */
+.tech-badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 2px;
+}
+
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.12) 0%,
+    rgba(79, 70, 229, 0.08) 100%
+  );
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: rgba(147, 197, 253, 0.9);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.tech-badge:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.2) 0%,
+    rgba(79, 70, 229, 0.14) 100%
+  );
+  border-color: rgba(59, 130, 246, 0.4);
+  color: rgba(147, 197, 253, 1);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+.text-grain {
+  position: relative;
+  color: transparent;
+  background: linear-gradient(to bottom right, #ffffff, #a5a5a5);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.text-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 100px 100px;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Glitch effect for text on hover */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+/* Auto glitch for all devices - always active */
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.glitch-text::before {
+  animation: glitch-auto-1 8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  color: #00ffff;
+  z-index: -1;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch-text::after {
+  animation: glitch-auto-2 7s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  color: #ff00ff;
+  z-index: -2;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+/* Enhanced glitch on hover */
+.glitch-text:hover::before {
+  animation: glitch-flicker-1 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.glitch-text:hover::after {
+  animation: glitch-flicker-2 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+@keyframes glitch-auto-1 {
+  0%,
+  100% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  2% {
+    transform: translate(-3px, 2px);
+    opacity: 0.8;
+  }
+  4% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  45%,
+  55% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  57% {
+    transform: translate(2px, -2px);
+    opacity: 0.7;
+  }
+  59% {
+    transform: translate(0);
+    opacity: 0;
+  }
+}
+
+@keyframes glitch-auto-2 {
+  0%,
+  100% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  30%,
+  40% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  42% {
+    transform: translate(-2px, 3px);
+    opacity: 0.75;
+  }
+  44% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  75%,
+  85% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  87% {
+    transform: translate(3px, -2px);
+    opacity: 0.8;
+  }
+  89% {
+    transform: translate(0);
+    opacity: 0;
+  }
+}
+
+@keyframes glitch-flicker-1 {
+  0%,
+  100% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  3% {
+    transform: translate(-3px, 2px);
+    opacity: 0.8;
+  }
+  6% {
+    transform: translate(2px, -3px);
+    opacity: 0;
+  }
+  10%,
+  30% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  33% {
+    transform: translate(4px, -2px);
+    opacity: 0.9;
+  }
+  36% {
+    transform: translate(-2px, 3px);
+    opacity: 0.7;
+  }
+  39% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  45%,
+  65% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  68% {
+    transform: translate(-3px, -4px);
+    opacity: 0.85;
+  }
+  70% {
+    transform: translate(2px, 2px);
+    opacity: 0;
+  }
+  75%,
+  100% {
+    transform: translate(0);
+    opacity: 0;
+  }
+}
+
+@keyframes glitch-flicker-2 {
+  0%,
+  100% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  5%,
+  25% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  28% {
+    transform: translate(3px, -3px);
+    opacity: 0.75;
+  }
+  31% {
+    transform: translate(-4px, 2px);
+    opacity: 0.9;
+  }
+  35% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  40%,
+  55% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  58% {
+    transform: translate(-2px, 4px);
+    opacity: 0.8;
+  }
+  61% {
+    transform: translate(3px, -2px);
+    opacity: 0.6;
+  }
+  64% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  70%,
+  85% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  87% {
+    transform: translate(2px, 3px);
+    opacity: 0.85;
+  }
+  90% {
+    transform: translate(0);
+    opacity: 0;
+  }
+}
+
+/* Subtle noise animation */
+@keyframes noise {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-2%, -2%);
+  }
+  20% {
+    transform: translate(2%, 2%);
+  }
+  30% {
+    transform: translate(-2%, 2%);
+  }
+  40% {
+    transform: translate(2%, -2%);
+  }
+  50% {
+    transform: translate(-2%, -2%);
+  }
+  60% {
+    transform: translate(2%, 2%);
+  }
+  70% {
+    transform: translate(-2%, 2%);
+  }
+  80% {
+    transform: translate(2%, -2%);
+  }
+  90% {
+    transform: translate(-2%, -2%);
+  }
+}
+
+.noise-bg {
+  position: relative;
+}
+
+.noise-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  animation: noise 1s steps(10) infinite;
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+
+/* Glitch scanlines effect */
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.05) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
+  animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Tech tag glitch effect */
+.tech-glitch {
+  transition: all 0.3s ease;
+}
+
+.tech-glitch:hover {
+  animation: tech-subtle-glitch 2.5s ease-in-out infinite;
+}
+
+@keyframes tech-subtle-glitch {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  5% {
+    transform: translate(-0.5px, 0.5px);
+  }
+  10%,
+  50% {
+    transform: translate(0, 0);
+  }
+  55% {
+    transform: translate(0.5px, -0.5px);
+  }
+  60%,
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* ==========================================
+   PROJECT COLLAGE SYSTEM - Enhanced UI Showcase
+   ========================================== */
+
+.collage-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced glow background with multiple layers */
+.collage-glow {
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(
+      circle at 25% 30%,
+      rgba(59, 130, 246, 0.12),
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 75% 70%,
+      rgba(147, 51, 234, 0.08),
+      transparent 50%
+    );
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(40px);
+}
+
+.collage-container:hover .collage-glow {
+  opacity: 1;
+}
+
+/* Refined noise texture */
+.collage-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.04;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Individual collage items - enhanced depth */
+.collage-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(
+    145deg,
+    rgba(20, 20, 20, 0.9),
+    rgba(10, 10, 10, 0.95)
+  );
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.collage-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.05) 0%,
+    transparent 50%,
+    rgba(147, 51, 234, 0.05) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.collage-item:hover::before {
+  opacity: 1;
+}
+
+.collage-item:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 8px 16px rgba(59, 130, 246, 0.1);
+}
+
+.collage-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
+  filter: brightness(0.95) contrast(1.05);
+}
+
+.collage-container.single .collage-item {
+  aspect-ratio: unset !important;
+}
+
+.collage-item:hover img {
+  transform: scale(1.08);
+}
+
+/* Enhanced cyber border with gradient animation */
+.collage-border {
+  position: absolute;
+  inset: -1px;
+  border-radius: 8px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.4),
+    rgba(147, 51, 234, 0.4),
+    rgba(59, 130, 246, 0.4)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.collage-item:hover .collage-border {
+  opacity: 1;
+  animation: border-shimmer 2s ease-in-out infinite;
+}
+
+@keyframes border-shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Refined scanline effect */
+.collage-scanline {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='filmGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23filmGrain)' opacity='0.08'/%3E%3C/svg%3E");
+  opacity: 1;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  animation: cinematic-flicker 0.15s ease-in-out infinite;
+}
+
+@keyframes cinematic-flicker {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+/* ==========================================
+   LAYOUT VARIATIONS - Natural UI Showcase Styles
+   ========================================== */
+
+/* Single image - hero showcase with dramatic depth */
+.collage-container.single {
+  grid-template-columns: 1fr;
+  padding: 0px !important;
+  background: radial-gradient(
+    circle at center,
+    rgba(20, 20, 30, 0.4),
+    transparent
+  );
+}
+
+.collage-container.single .collage-item {
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6),
+    0 8px 24px rgba(59, 130, 246, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.collage-container.single .collage-item img {
+  padding: 16px !important;
+}
+/* Duo - overlapping magazine layout */
+.collage-container.duo {
+  grid-template-columns: 1fr;
+  padding: 20px 16px;
+  gap: 0;
+}
+
+.collage-container.duo .collage-item:first-child {
+  grid-column: 1;
+  grid-row: 1;
+  aspect-ratio: 16 / 9;
+  z-index: 2;
+  margin-right: 40px;
+  margin-bottom: -30px;
+}
+
+.collage-container.duo .collage-item:last-child {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  justify-self: end;
+  width: 45%;
+  z-index: 3;
+  transform: translateX(10px);
+}
+
+.collage-container.duo .collage-item.mobile {
+  aspect-ratio: 9 / 19;
+  box-shadow: -8px 12px 40px rgba(0, 0, 0, 0.5),
+    0 4px 16px rgba(147, 51, 234, 0.15);
+}
+
+.collage-container.duo .collage-item.desktop {
+  aspect-ratio: 16 / 9;
+}
+
+/* Trio - asymmetric showcase layout */
+.collage-container.trio {
+  grid-template-columns: 1.4fr 1fr;
+  grid-template-rows: 1fr 0.9fr;
+  gap: 14px;
+  padding: 18px;
+}
+
+.collage-container.trio .primary {
+  grid-row: span 2;
+  aspect-ratio: 16 / 10;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45),
+    0 4px 16px rgba(59, 130, 246, 0.1);
+}
+
+.collage-container.trio .item-1 {
+  aspect-ratio: 4 / 3;
+  align-self: end;
+}
+
+.collage-container.trio .item-2 {
+  aspect-ratio: 4 / 3;
+  align-self: start;
+}
+
+.collage-container.trio .item-1.mobile,
+.collage-container.trio .item-2.mobile {
+  aspect-ratio: 9 / 16;
+  justify-self: center;
+  width: 80%;
+}
+
+/* Grid - balanced mosaic */
+.collage-container.grid {
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: minmax(120px, 1fr);
+  gap: 10px;
+  padding: 16px;
+}
+
+.collage-container.grid .primary {
+  grid-column: span 2;
+  aspect-ratio: 21 / 9;
+  border-radius: 10px;
+}
+
+/* 4-image layout - 2x2 grid with top-spanning hero */
+.collage-container.grid.four {
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 12px;
+}
+
+.collage-container.grid.four .primary {
+  grid-column: span 2;
+  grid-row: 1;
+  aspect-ratio: 21 / 9;
+}
+
+.collage-container.grid.four .item-1,
+.collage-container.grid.four .item-2,
+.collage-container.grid.four .item-3 {
+  aspect-ratio: 1;
+}
+
+/* 5-image layout - asymmetric showcase */
+.collage-container.grid.five {
+  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 12px;
+}
+
+.collage-container.grid.five .primary {
+  grid-column: 1;
+  grid-row: span 2;
+  aspect-ratio: 16 / 12;
+}
+
+.collage-container.grid.five .item-1 {
+  grid-column: 2;
+  grid-row: 1;
+  aspect-ratio: 1;
+}
+
+.collage-container.grid.five .item-2 {
+  grid-column: 3;
+  grid-row: 1;
+  aspect-ratio: 1;
+}
+
+.collage-container.grid.five .item-3 {
+  grid-column: 2 / 4;
+  grid-row: 2;
+  aspect-ratio: 2 / 1;
+}
+
+/* 6-image layout - balanced 3x2 grid */
+.collage-container.grid.six {
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 10px;
+}
+
+.collage-container.grid.six .primary {
+  grid-column: span 2;
+  grid-row: 1;
+  aspect-ratio: 2 / 1;
+}
+
+.collage-container.grid.six .item-1,
+.collage-container.grid.six .item-2,
+.collage-container.grid.six .item-3,
+.collage-container.grid.six .item-4 {
+  aspect-ratio: 1;
+}
+
+/* Device-specific natural styling */
+.collage-item.desktop {
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+}
+
+.collage-item.mobile {
+  aspect-ratio: 9 / 19.5;
+  border-radius: 12px;
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.collage-item.tablet {
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+}
+
+/* Primary item - extra polish */
+.collage-item.primary {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5),
+    0 4px 16px rgba(59, 130, 246, 0.12), 0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.collage-item.primary::before {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.08) 0%,
+    transparent 40%,
+    rgba(147, 51, 234, 0.06) 100%
+  );
+}
+
+/* Remove hovered class handling */
+.collage-container.hovered {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Enhanced stagger animation */
+.collage-item {
+  animation: collage-fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1)
+    calc(var(--index) * 0.12s) both;
+}
+
+@keyframes collage-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

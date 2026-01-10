@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b0b0b"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1200" height="800" fill="url(#g)"/>
+  <rect x="40" y="40" width="1120" height="720" rx="24" fill="#0f172a" stroke="#9333ea" stroke-opacity="0.35"/>
+  <text x="600" y="410" fill="#c4b5fd" font-size="48" font-family="Inter, Arial" text-anchor="middle">Arcade Commerce — Thumb</text>
+</svg>
