@@ -162,7 +162,7 @@ const HeroScroll = () => {
               }}
               className="text-lg text-neutral-300 max-w-2xl leading-relaxed"
             >
-              A frontend-focused developer with full-stack experience, working
+              Frontend-focused developer with full-stack experience, working
               primarily with React and Flutter. I’ve built web and mobile
               applications for business, internal tools, and academic projects,
               with an emphasis on clean UI architecture, responsive design, and
