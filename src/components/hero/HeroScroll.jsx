@@ -205,7 +205,7 @@ const HeroScroll = () => {
             <div className="flex items-center gap-2">
               <HackerNumber value="2+" delay={600} />
 
-              <span>Years Experience</span>
+              <span>Years of Experience</span>
             </div>
 
             <div className="h-4 w-px bg-white/20 hidden sm:block" />
@@ -216,12 +216,12 @@ const HeroScroll = () => {
               <span>Projects Delivered</span>
             </div>
 
-            <div className="h-4 w-px bg-white/20 hidden sm:block" />
+            {/* <div className="h-4 w-px bg-white/20 hidden sm:block" /> */}
 
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <span className="text-white font-semibold">Web & Mobile</span>
               <span>Applications</span>
-            </div>
+            </div> */}
           </motion.div>
 
           {/* Profile Image — Commented out temporarily */}
