@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import heroBg from "../../assets/hero-geometric.jpg";
 import profileImg from "../../assets/profile.jpg";
 import Starfield from "../ui/Starfield";
+import HackerNumber from "../HackerNumber";
 
 const HeroScroll = () => {
   const containerRef = useRef(null);
@@ -56,6 +57,14 @@ const HeroScroll = () => {
   const textOpacity = useTransform(smoothProgress, [0, 0.6, 1], [1, 0.8, 0.5]);
   const textScale = useTransform(smoothProgress, [0, 1], [1, 0.98]);
 
+  // Stats: very subtle movement (feels grounded)
+  const statsOpacity = useTransform(
+    smoothProgress,
+    [0, 0.25, 0.5],
+    [1, 0.6, 0]
+  );
+  const statsY = useTransform(smoothProgress, [0, 0.5], ["0%", "6%"]);
+
   const profileY = useTransform(smoothProgress, [0, 1], ["0%", "-50%"]);
   const profileScale = useTransform(
     smoothProgress,
@@ -97,8 +106,7 @@ const HeroScroll = () => {
         </motion.div>
 
         {/* Content Layer */}
-        <div className="relative z-20 flex h-full flex-col items-center justify-center px-4 text-center lg:px-32">
-          {/* Text Content */}
+        <div className="relative z-20 flex h-full flex-col items-center justify-center px-4 text-center lg:px-32 pb-24 sm:pb-0">
           <motion.div
             style={{
               y: textY,
@@ -160,14 +168,60 @@ const HeroScroll = () => {
                 opacity: descriptionOpacity,
                 scale: descriptionScale,
               }}
-              className="text-lg text-neutral-300 max-w-2xl leading-relaxed"
+              className="text-lg text-neutral-300 max-w-3xl leading-relaxed"
             >
-              Frontend-focused developer with full-stack experience, working
-              primarily with React and Flutter. I’ve built web and mobile
-              applications for business, internal tools, and academic projects,
-              with an emphasis on clean UI architecture, responsive design, and
+              Frontend-focused developer with full-stack experience, primarily
+              using React and Flutter. I build web and mobile applications for
+              business, internal tools, and academic projects, with a strong
+              focus on clean UI architecture, responsive design, and
               maintainable code.
             </motion.p>
+          </motion.div>
+          {/* <div className="mt-6 flex gap-4">
+            <a
+              href="#contact"
+              className="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:border-white/40 hover:text-white transition"
+            >
+              Contact
+            </a>
+
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              className="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:border-white/40 hover:text-white transition"
+            >
+              Resume
+            </a>
+          </div> */}
+
+          <motion.div
+            style={{
+              opacity: statsOpacity,
+              y: statsY,
+              pointerEvents: "none",
+            }}
+            className="mt-10 flex flex-wrap justify-center gap-y-4 gap-x-6 text-sm text-neutral-400 sm:gap-6"
+          >
+            <div className="flex items-center gap-2">
+              <HackerNumber value="2+" delay={600} />
+
+              <span>Years Experience</span>
+            </div>
+
+            <div className="h-4 w-px bg-white/20 hidden sm:block" />
+
+            <div className="flex items-center gap-2">
+              <HackerNumber value="10+" delay={700} />
+
+              <span>Projects Delivered</span>
+            </div>
+
+            <div className="h-4 w-px bg-white/20 hidden sm:block" />
+
+            <div className="flex items-center gap-2">
+              <span className="text-white font-semibold">Web & Mobile</span>
+              <span>Applications</span>
+            </div>
           </motion.div>
 
           {/* Profile Image — Commented out temporarily */}

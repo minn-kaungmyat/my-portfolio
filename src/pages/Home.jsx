@@ -38,6 +38,7 @@ const Home = () => {
             >
               Let’s Connect
             </motion.h2>
+
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -69,6 +70,15 @@ const Home = () => {
                   Get in Touch
                 </motion.a>
               </Magnetic>
+              {/* <motion.a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-neutral-500 hover:text-white transition"
+                data-cursor="hover"
+              >
+                Download Resume
+              </motion.a> */}
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
