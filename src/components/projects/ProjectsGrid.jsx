@@ -15,18 +15,61 @@ import { resolveImages, resolveThumbnails } from "../../utils/assets";
 const ProjectsGrid = ({ onModalChange }) => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [contextFilter, setContextFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAll, setShowAll] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const categoryScrollRef = useRef(null);
 
   const contextOptions = [
     "All",
     ...Array.from(new Set(projects.map((p) => p.context))),
   ];
 
+  const categoryOptions = [
+    "All",
+    ...Array.from(new Set(projects.map((p) => p.productType))).sort(),
+  ];
+
+  // Check scroll position for category carousel
+  const checkScroll = () => {
+    const container = categoryScrollRef.current;
+    if (!container) return;
+
+    setCanScrollLeft(container.scrollLeft > 0);
+    setCanScrollRight(
+      container.scrollLeft < container.scrollWidth - container.clientWidth - 10
+    );
+  };
+
+  const scrollCategory = (direction) => {
+    const container = categoryScrollRef.current;
+    if (!container) return;
+
+    const scrollAmount = 250;
+    if (direction === "left") {
+      container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    } else {
+      container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
+
   // Reset expansion when changing filters so the list feels intentional
   useEffect(() => {
     setShowAll(false);
-  }, [contextFilter]);
+  }, [contextFilter, categoryFilter]);
+
+  // Check scroll position on mount and after categories render
+  useEffect(() => {
+    const timer = setTimeout(() => checkScroll(), 100);
+    window.addEventListener("resize", checkScroll);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, []);
 
   // Notify parent when modal closes
   useEffect(() => {
@@ -147,7 +190,9 @@ const ProjectsGrid = ({ onModalChange }) => {
   };
 
   const filteredProjects = projects.filter(
-    (p) => contextFilter === "All" || p.context === contextFilter
+    (p) =>
+      (contextFilter === "All" || p.context === contextFilter) &&
+      (categoryFilter === "All" || p.productType === categoryFilter)
   );
 
   const displayedProjects = showAll
@@ -167,12 +212,11 @@ const ProjectsGrid = ({ onModalChange }) => {
           Selected Works
         </motion.h2>
 
-        <div className="flex flex-wrap gap-4">
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            {/* Temporarily hide 'Personal' context pill — re-enable by removing the filter below */}
-            {contextOptions
-              .filter((opt) => opt !== "Personal")
-              .map((opt, idx) => (
+        <div className="flex flex-wrap gap-6">
+          {/* Context Filter */}
+          <div className="w-full">
+            <div className="flex items-center gap-2 flex-wrap">
+              {contextOptions.map((opt, idx) => (
                 <motion.button
                   key={opt}
                   initial={{ opacity: 0, y: 20 }}
@@ -180,7 +224,7 @@ const ProjectsGrid = ({ onModalChange }) => {
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.05 }}
                   onClick={() => setContextFilter(opt)}
-                  className={`px-4 py-2 rounded-full text-sm transition-all duration-300 relative overflow-hidden ${
+                  className={`px-4 py-2 rounded-full text-sm transition-all duration-300 relative overflow-hidden whitespace-nowrap ${
                     contextFilter === opt
                       ? "bg-white text-black font-medium"
                       : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
@@ -200,6 +244,73 @@ const ProjectsGrid = ({ onModalChange }) => {
                   {opt}
                 </motion.button>
               ))}
+            </div>
+          </div>
+
+          {/* Category Filter - Horizontal Scrollable */}
+          <div className="w-full">
+            <div className="flex items-center gap-2">
+              {/* Left Carousel Button */}
+              {canScrollLeft && (
+                <button
+                  onClick={() => scrollCategory("left")}
+                  className="flex-shrink-0 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-all duration-300"
+                  aria-label="Scroll left"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+              )}
+
+              <div
+                ref={categoryScrollRef}
+                onScroll={checkScroll}
+                className="overflow-x-auto overflow-y-hidden scroll-smooth scrollbar-hide flex-1"
+              >
+                <div className="flex items-center gap-2">
+                  {categoryOptions.map((opt, idx) => (
+                    <motion.button
+                      key={opt}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        delay: (contextOptions.length + idx) * 0.05,
+                      }}
+                      onClick={() => setCategoryFilter(opt)}
+                      className={`px-4 py-2 rounded-full text-sm transition-all duration-300 relative overflow-hidden whitespace-nowrap flex-shrink-0 ${
+                        categoryFilter === opt
+                          ? "bg-white text-black font-medium"
+                          : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      {categoryFilter !== opt && (
+                        <span
+                          className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity pointer-events-none"
+                          style={{
+                            backgroundImage:
+                              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+                            mixBlendMode: "overlay",
+                            opacity: 0.1,
+                          }}
+                        />
+                      )}
+                      {opt}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Carousel Button */}
+              {canScrollRight && (
+                <button
+                  onClick={() => scrollCategory("right")}
+                  className="flex-shrink-0 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-all duration-300"
+                  aria-label="Scroll right"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

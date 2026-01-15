@@ -5,6 +5,16 @@
   --foreground: 0 0% 98%;
 }
 
+/* Hide scrollbar while keeping functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Tech Stack Badges */
 .tech-badges-container {
   display: flex;
