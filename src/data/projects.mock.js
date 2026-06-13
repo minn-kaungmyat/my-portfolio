@@ -1,5 +1,33 @@
 export const projects = [
   {
+    id: 9,
+    title: "lazyday.fm",
+    slug: "lazyday",
+    assetsBase: "/projects/lazyday",
+    productType: "Chill App",
+    platforms: ["Web"],
+    context: "Personal",
+    featured: true,
+    year: 2026,
+    status: "Live",
+    tagline: "Customizable focus workspace with global radio stations and ambient mixers",
+    images: ["01.png", "02.png", "03.png", "04.png", "05.png"],
+    thumbnail: ["01.png"],
+    video: "/src/assets/sample-vid.mp4",
+    description: "A personalized focus room application combining a global radio player, ambient sound mixer, and immersive video backgrounds. It features interactive productivity tools like a draggable Pomodoro timer, a floating notepad, and a real-time global study lounge chat to keep users engaged and focused.",
+    roleType: "Full-stack",
+    role: [
+      "Built a highly interactive and draggable UI using React and Framer Motion",
+      "Integrated global radio APIs to stream thousands of live stations",
+      "Developed an ambient sound mixer with independent volume controls",
+      "Implemented a real-time global chat room utilizing Pusher",
+      "Managed complex application state for audio playback and UI using Zustand"
+    ],
+    techs: ["React", "TypeScript", "Vite", "Zustand", "Pusher", "Framer Motion"],
+    liveLink: "https://lazyday-fm.vercel.app/",
+    sourceLink: "https://github.com/minn-kaungmyat/radiom",
+  },
+  {
     id: 4,
     title: "Resume Analyzer",
     slug: "resume-analyzer",
