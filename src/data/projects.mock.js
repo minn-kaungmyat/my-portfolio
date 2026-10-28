@@ -1,5 +1,34 @@
 export const projects = [
   {
+    id: 13,
+    title: "CloudHub",
+    slug: "cloudhub",
+    assetsBase: "/projects/cloudhub",
+    productType: "Cloud Storage Manager",
+    platforms: ["Web"],
+    context: "Personal",
+    featured: true,
+    year: 2026,
+    status: "Live",
+    tagline:
+      "One dashboard to browse, search, and manage files across Google Drive, Dropbox, and OneDrive",
+    images: ["01.webp", "02.webp", "03.webp", "04.webp", "05.webp"],
+    thumbnail: ["01.webp"],
+    description:
+      "A provider-agnostic cloud management platform that connects multiple cloud storage accounts and brings every file into one fast, desktop-inspired interface. Instead of juggling browser tabs, users browse, search, preview, and organize files from Google Drive, Dropbox, and OneDrive in one place. CloudHub never stores user files: it syncs only metadata into PostgreSQL, so search across every connected account is instant.",
+    roleType: "Full-stack",
+    role: [
+      "Designed a provider abstraction layer so every cloud service implements one shared interface and the frontend never contains provider-specific logic",
+      "Created a desktop-inspired file browser with grid/list views, multi-select bulk actions, and a file inspector panel",
+      "Implemented Google OAuth2 account linking with encrypted refresh-token storage and JWT authentication",
+      "Planned a metadata sync service backed by PostgreSQL full-text search for instant unified search",
+      "Built account settings with per-provider storage usage and multi-account management",
+    ],
+    techs: ["React", "TypeScript", "TailwindCSS", "Node.js", "PostgreSQL", "Prisma"],
+    liveLink: "https://cloudhub-app.vercel.app/",
+    sourceLink: "https://github.com/minn-kaungmyat/cloud-hub",
+  },
+  {
     id: 9,
     title: "lazyday.fm",
     slug: "lazyday",
@@ -12,8 +41,7 @@ export const projects = [
     status: "Live",
     tagline: "Customizable focus workspace with global radio stations and ambient mixers",
     images: ["01.png", "02.png", "03.png", "04.png", "05.png"],
-    thumbnail: ["01.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01.webp"],
     description: "A personalized focus room application combining a global radio player, ambient sound mixer, and immersive video backgrounds. It features interactive productivity tools like a draggable Pomodoro timer, a floating notepad, and a real-time global study lounge chat to keep users engaged and focused.",
     roleType: "Full-stack",
     role: [
@@ -41,8 +69,7 @@ export const projects = [
     tagline:
       "AI-powered resume analyzer with seamless authentication and job matching",
     images: ["01.png", "02.png", "03.png", "04.png", "05.png"],
-    thumbnail: ["01.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01.webp"],
     description:
       "An intelligent resume analysis platform that leverages AI to match candidates with job opportunities. Features seamless authentication, secure resume storage via cloud integration, and smart candidate-to-job matching using advanced AI evaluations. The app provides a clean, reusable UI for an effortless user experience.",
     roleType: "Full-stack",
@@ -88,8 +115,7 @@ export const projects = [
       "14.png",
       "15.png",
     ],
-    thumbnail: ["01-front.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01-front.webp"],
     description:
       "A production accounting system used by distribution teams to manage invoices, expenses, and financial reports.",
     roleType: "Frontend",
@@ -116,8 +142,7 @@ export const projects = [
     status: "Concept",
     tagline: "Cross-platform point-of-sale application",
     images: ["01.jpg", "02.jpg", "03.jpg", "04.png", "05.png", "06.png"],
-    thumbnail: ["01.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01.webp"],
     description:
       "A cross-platform POS application with responsive layouts, state-driven checkout logic, and offline transaction support.",
     roleType: "Frontend",
@@ -144,8 +169,7 @@ export const projects = [
     status: "Live",
     tagline: "Internal portal for employee management and daily operations",
     images: ["00.png", "01.png", "02.png", "03.png", "04.png"],
-    thumbnail: ["01.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01.webp"],
     description:
       "An internal employee portal for profiles, attendance, and daily workflows, built with Flutter on web and structured for future mobile expansion.",
     roleType: "Frontend",
@@ -180,8 +204,7 @@ export const projects = [
       "05.png",
       "06.png",
     ],
-    thumbnail: ["01.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01.webp"],
     description:
       "A HR management portal built with Flutter to enable future mobile expansion, supporting employee records, attendance tracking, and leave workflows.",
     roleType: "Full-stack",
@@ -217,8 +240,7 @@ export const projects = [
       "07.jpg",
       "08.jpg",
     ],
-    thumbnail: ["01.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01.webp"],
     description:
       "A Flutter-based NFC application that allows users to scan registered tags and manage associated personal links. The app focuses on reliable NFC interactions, clean mobile UI, and consistent behavior across iOS and Android.",
     roleType: "Frontend",
@@ -242,7 +264,7 @@ export const projects = [
     context: "Work",
     featured: false,
     year: 2025,
-    status: "In Development",
+    status: "Live",
     tagline:
       "Mobile-first accounting system built with Flutter for distribution teams",
     images: [
@@ -254,7 +276,7 @@ export const projects = [
       "06.jpg",
       "07.jpg",
     ],
-    thumbnail: ["01.png"],
+    thumbnail: ["01.webp"],
     description:
       "A mobile-focused accounting system built with Flutter, designed for field and office use with responsive layouts for web. I contributed to the core UI development and key accounting workflows; the project continues to be developed by the team.",
     roleType: "Frontend",
@@ -290,8 +312,7 @@ export const projects = [
       "07.png",
       "08.png",
     ],
-    thumbnail: ["01.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01.webp"],
     description:
       "A web-based healthcare platform for managing appointments, patient records, and consultations. It automates clinical workflows for doctors, patients, and admins with secure role-based access.",
     roleType: "Full-stack",
@@ -329,8 +350,7 @@ export const projects = [
       "08.png",
       "09.png",
     ],
-    thumbnail: ["01.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01.webp"],
     description:
       "A web-based logistics platform for managing household goods transport. It automates job booking, delivery tracking, and resource allocation through dedicated customer and admin portals.",
     roleType: "Full-stack",
@@ -368,8 +388,7 @@ export const projects = [
       "09.png",
       "10.png",
     ],
-    thumbnail: ["01.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01.webp"],
     description:
       "A web-based system that automates lost and found operations for universities. It utilizes a smart matching engine to connect lost items with found reports and provides dashboards for administrative management.",
     roleType: "Full-stack",
@@ -410,8 +429,7 @@ export const projects = [
       "11.png",
       "12.png",
     ],
-    thumbnail: ["01.png"],
-    video: "/src/assets/sample-vid.mp4",
+    thumbnail: ["01.webp"],
     description:
       "A web-based event management platform that facilitates ticket purchasing, organizer oversight, and attendee check-ins through a centralized system.",
     roleType: "Full-stack",

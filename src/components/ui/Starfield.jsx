@@ -1,132 +1,246 @@
 import React, { useEffect, useRef } from "react";
-import * as THREE from "three";
+import {
+  AdditiveBlending,
+  BufferAttribute,
+  BufferGeometry,
+  Clock,
+  PerspectiveCamera,
+  Points,
+  Scene,
+  ShaderMaterial,
+  WebGLRenderer,
+} from "three";
+
+// GPU starfield: stars fly toward the camera entirely in the vertex shader
+// (no per-frame CPU loop over points), glow as soft round sprites, twinkle,
+// lean toward the mouse, and burst into warp speed while the page scrolls.
+
+const vertexShader = /* glsl */ `
+  uniform float uTime;
+  uniform float uTravel;
+  uniform float uDepth;
+  uniform float uPixelRatio;
+  uniform float uWarp;
+
+  attribute float aSize;
+  attribute float aPhase;
+  attribute vec3 aColor;
+
+  varying vec3 vColor;
+  varying float vAlpha;
+
+  void main() {
+    vec3 pos = position;
+    // Loop each star from the far plane to just past the camera
+    pos.z = mod(pos.z + uTravel, uDepth) - uDepth;
+
+    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+    gl_Position = projectionMatrix * mvPosition;
+
+    float dist = -mvPosition.z;
+    float fadeIn = smoothstep(uDepth, uDepth * 0.6, dist);
+    float fadeOut = smoothstep(0.0, 8.0, dist);
+    float twinkle = 0.65 + 0.35 * sin(uTime * (1.5 + aPhase) + aPhase * 6.2831);
+
+    vAlpha = fadeIn * fadeOut * twinkle;
+    vColor = aColor;
+
+    // Perspective size, swelling slightly at warp speed
+    gl_PointSize = min(
+      aSize * uPixelRatio * (1.0 + uWarp * 1.5) * (260.0 / dist),
+      18.0 * uPixelRatio
+    );
+  }
+`;
+
+const fragmentShader = /* glsl */ `
+  varying vec3 vColor;
+  varying float vAlpha;
+
+  void main() {
+    float d = length(gl_PointCoord - 0.5);
+    // Bright core with a soft halo
+    float core = smoothstep(0.5, 0.0, d);
+    float glow = pow(core, 3.0) + core * 0.25;
+    gl_FragColor = vec4(vColor, glow * vAlpha);
+  }
+`;
+
+// Mostly white, with a few cool and warm stars echoing the cursor gradient
+const palette = [
+  [1, 1, 1],
+  [1, 1, 1],
+  [1, 1, 1],
+  [0.65, 0.9, 1], // cyan
+  [0.75, 0.65, 1], // violet
+  [1, 0.7, 0.85], // pink
+];
 
 const Starfield = () => {
   const mountRef = useRef(null);
 
   useEffect(() => {
     const mount = mountRef.current;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
 
-    // Scene setup
-    const scene = new THREE.Scene();
-    // Fog for depth fading
-    scene.fog = new THREE.FogExp2(0x000000, 0.002);
+    const renderer = new WebGLRenderer({
+      alpha: true,
+      antialias: false, // round point sprites don't need MSAA
+      powerPreference: "high-performance",
+    });
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.75);
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(mount.clientWidth, mount.clientHeight);
+    mount.appendChild(renderer.domElement);
 
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
+    const scene = new Scene();
+    const camera = new PerspectiveCamera(
+      70,
+      mount.clientWidth / mount.clientHeight,
       0.1,
       1000
     );
-    camera.position.z = 1;
-    camera.rotation.x = Math.PI / 2; // Look up/down? No, let's look forward.
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mount.appendChild(renderer.domElement);
+    const depth = 600;
+    const count = isSmallScreen ? 1600 : 3600;
+    const positions = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
+    const phases = new Float32Array(count);
+    const colors = new Float32Array(count * 3);
 
-    // Stars
-    const starGeometry = new THREE.BufferGeometry();
-    const starCount = 6000;
-    const posArray = new Float32Array(starCount * 3);
-    const velocityArray = new Float32Array(starCount);
+    for (let i = 0; i < count; i++) {
+      // Keep a clear tunnel down the middle so stars stream past, not into, the text
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 12 + Math.pow(Math.random(), 0.7) * 220;
+      positions[i * 3] = Math.cos(angle) * radius;
+      positions[i * 3 + 1] = Math.sin(angle) * radius;
+      positions[i * 3 + 2] = Math.random() * depth;
 
-    for (let i = 0; i < starCount * 3; i += 3) {
-      posArray[i] = (Math.random() - 0.5) * 600; // x
-      posArray[i + 1] = (Math.random() - 0.5) * 600; // y
-      posArray[i + 2] = (Math.random() - 0.5) * 600; // z
+      sizes[i] = 0.6 + Math.pow(Math.random(), 3) * 3.2;
+      phases[i] = Math.random();
 
-      velocityArray[i / 3] = 0.1 + Math.random() * 0.5; // Individual speed
+      const [r, g, b] = palette[Math.floor(Math.random() * palette.length)];
+      colors[i * 3] = r;
+      colors[i * 3 + 1] = g;
+      colors[i * 3 + 2] = b;
     }
 
-    starGeometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(posArray, 3)
-    );
+    const geometry = new BufferGeometry();
+    geometry.setAttribute("position", new BufferAttribute(positions, 3));
+    geometry.setAttribute("aSize", new BufferAttribute(sizes, 1));
+    geometry.setAttribute("aPhase", new BufferAttribute(phases, 1));
+    geometry.setAttribute("aColor", new BufferAttribute(colors, 3));
 
-    // Create a circular texture for stars
-    // const sprite = new THREE.TextureLoader().load('https://threejs.org/examples/textures/sprites/disc.png');
-
-    const starMaterial = new THREE.PointsMaterial({
-      size: 0.5,
-      color: 0xffffff,
+    const material = new ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms: {
+        uTime: { value: 0 },
+        uTravel: { value: 0 },
+        uDepth: { value: depth },
+        uPixelRatio: { value: pixelRatio },
+        uWarp: { value: 0 },
+      },
       transparent: true,
-      opacity: 0.8,
-      // map: sprite, // Optional: use texture if available, else squares
-      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      blending: AdditiveBlending,
     });
 
-    const starMesh = new THREE.Points(starGeometry, starMaterial);
-    scene.add(starMesh);
+    const stars = new Points(geometry, material);
+    stars.frustumCulled = false; // positions are rewritten in the shader
+    scene.add(stars);
 
-    // Animation
     let mouseX = 0;
     let mouseY = 0;
-    let targetX = 0;
-    let targetY = 0;
+    let lastScrollY = window.scrollY;
+    let warp = 0;
+    let raf = null;
+    let visible = true;
+    const clock = new Clock();
 
-    const handleMouseMove = (event) => {
-      mouseX = event.clientX - window.innerWidth / 2;
-      mouseY = event.clientY - window.innerHeight / 2;
+    const handleMouseMove = (e) => {
+      mouseX = e.clientX / window.innerWidth - 0.5;
+      mouseY = e.clientY / window.innerHeight - 0.5;
     };
 
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.aspect = mount.clientWidth / mount.clientHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(mount.clientWidth, mount.clientHeight);
+      if (raf === null) renderer.render(scene, camera);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("resize", handleResize);
+    const tick = () => {
+      const delta = Math.min(clock.getDelta(), 0.05);
+      const { uniforms } = material;
 
-    // const clock = new THREE.Clock();
+      // Scroll speed drives warp; ease in fast, settle slowly
+      const scrollSpeed = Math.abs(window.scrollY - lastScrollY);
+      lastScrollY = window.scrollY;
+      const targetWarp = Math.min(scrollSpeed / 40, 1);
+      warp += (targetWarp - warp) * (targetWarp > warp ? 0.2 : 0.04);
 
-    const animate = () => {
-      //   const elapsedTime = clock.getElapsedTime();
+      uniforms.uTime.value += delta;
+      uniforms.uTravel.value += delta * (14 + warp * 260);
+      uniforms.uWarp.value = warp;
 
-      targetX = mouseX * 0.001;
-      targetY = mouseY * 0.001;
-
-      // Rotate entire system based on mouse
-      starMesh.rotation.y += 0.05 * (targetX - starMesh.rotation.y);
-      starMesh.rotation.x += 0.05 * (targetY - starMesh.rotation.x);
-
-      // Move stars towards camera (Warp effect)
-      const positions = starGeometry.attributes.position.array;
-
-      for (let i = 0; i < starCount; i++) {
-        // Move Z
-        positions[i * 3 + 1] -= 0.5; // Move "down" or "forward" depending on rotation
-
-        // If star passes camera, reset to back
-        if (positions[i * 3 + 1] < -300) {
-          positions[i * 3 + 1] = 300;
-        }
-      }
-
-      starGeometry.attributes.position.needsUpdate = true;
-
-      // Gentle rotation
-      starMesh.rotation.z += 0.001;
+      stars.rotation.y += (mouseX * 0.25 - stars.rotation.y) * 0.04;
+      stars.rotation.x += (mouseY * 0.15 - stars.rotation.x) * 0.04;
+      stars.rotation.z += delta * 0.01;
 
       renderer.render(scene, camera);
-      requestAnimationFrame(animate);
+      raf = requestAnimationFrame(tick);
     };
 
-    animate();
+    const start = () => {
+      if (raf === null && visible && !reduceMotion) {
+        clock.getDelta(); // don't jump after a pause
+        lastScrollY = window.scrollY;
+        raf = requestAnimationFrame(tick);
+      }
+    };
+
+    const stop = () => {
+      if (raf !== null) cancelAnimationFrame(raf);
+      raf = null;
+    };
+
+    // Stop rendering once the hero has scrolled out of view
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) start();
+      else stop();
+    });
+
+    renderer.render(scene, camera); // static frame for reduced motion
+    start();
+    observer.observe(mount);
+    window.addEventListener("resize", handleResize);
+    if (!reduceMotion) {
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    }
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      stop();
+      observer.disconnect();
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
       mount.removeChild(renderer.domElement);
-      starGeometry.dispose();
-      starMaterial.dispose();
+      geometry.dispose();
+      material.dispose();
+      renderer.dispose();
     };
   }, []);
 
   return (
-    <div ref={mountRef} className="absolute inset-0 z-0 pointer-events-none" />
+    <div
+      ref={mountRef}
+      aria-hidden="true"
+      className="absolute inset-0 z-[2] pointer-events-none"
+    />
   );
 };
 

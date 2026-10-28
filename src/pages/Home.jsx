@@ -8,12 +8,13 @@ import About from "../components/about/About";
 import Skills from "../components/skills/Skills";
 import { motion } from "framer-motion";
 import Magnetic from "../components/ui/Magnetic";
+import CopyEmail from "../components/ui/CopyEmail";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   return (
-    <main className="bg-black min-h-screen text-white cursor-none selection:bg-white/30">
+    <main className="hide-native-cursor bg-black min-h-screen text-white selection:bg-white/30">
       <CustomCursor />
       <Navbar isHidden={isModalOpen} />
 
@@ -70,6 +71,15 @@ const Home = () => {
                   Get in Touch
                 </motion.a>
               </Magnetic>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.25 }}
+                className="-mt-4"
+              >
+                <CopyEmail email="minnkaungmyat00@gmail.com" />
+              </motion.div>
               {/* <motion.a
                 href="/resume.pdf"
                 target="_blank"

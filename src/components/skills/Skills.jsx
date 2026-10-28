@@ -1,8 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Code2, Palette, Database, Globe, Terminal, Cpu } from "lucide-react";
+import { Code2, Palette, Database, Globe, Terminal, Cpu, Layers } from "lucide-react";
 import {
   SiReact,
+  SiTypescript,
   SiNextdotjs,
   SiJavascript,
   SiFlutter,
@@ -12,6 +13,11 @@ import {
   SiCss3,
   SiDotnet,
   SiGraphql,
+  SiNodedotjs,
+  SiExpress,
+  SiPostgresql,
+  SiPrisma,
+  SiReactquery,
   SiGit,
   SiVite,
   SiFigma,
@@ -24,6 +30,13 @@ import { FaJava } from "react-icons/fa";
 
 const techIcons = {
   React: SiReact,
+  TypeScript: SiTypescript,
+  Zustand: Layers,
+  "TanStack Query": SiReactquery,
+  "Node.js": SiNodedotjs,
+  Express: SiExpress,
+  PostgreSQL: SiPostgresql,
+  Prisma: SiPrisma,
   "Next.js": SiNextdotjs,
   JavaScript: SiJavascript,
   Flutter: SiFlutter,
@@ -56,11 +69,14 @@ const skills = [
     icon: Code2,
     items: [
       "React",
+      "TypeScript",
       "JavaScript",
       "Next.js",
       "Flutter",
       "Dart",
       "Tailwind CSS",
+      "Zustand",
+      "TanStack Query",
       "HTML5",
       "CSS3",
     ],
@@ -70,10 +86,14 @@ const skills = [
     name: "Backend",
     icon: Database,
     items: [
+      "Node.js",
+      "Express",
       "ASP.NET Core",
       "ASP.NET MVC",
       "C#",
       "Entity Framework Core",
+      "PostgreSQL",
+      "Prisma",
       "SQL",
       "GraphQL",
       "Java",

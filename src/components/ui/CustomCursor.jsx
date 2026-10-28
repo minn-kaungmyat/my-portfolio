@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 const CustomCursor = () => {
+  // Matches .hide-native-cursor in index.css: mouse / trackpad only
+  const hasFinePointer = useMediaQuery("(hover: hover) and (pointer: fine)");
   const [isHovered, setIsHovered] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
@@ -11,10 +15,15 @@ const CustomCursor = () => {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
+    if (!hasFinePointer) return;
+
     const moveCursor = (e) => {
       cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
+      setIsVisible(true);
     };
+
+    const handleLeave = () => setIsVisible(false);
 
     const handleMouseOver = (e) => {
       const target = e.target;
@@ -23,6 +32,7 @@ const CustomCursor = () => {
         target.tagName === "BUTTON" ||
         target.closest("a") ||
         target.closest("button") ||
+        target.closest('[role="button"]') ||
         target.getAttribute("data-cursor") === "hover"
       ) {
         setIsHovered(true);
@@ -33,16 +43,21 @@ const CustomCursor = () => {
 
     window.addEventListener("mousemove", moveCursor);
     window.addEventListener("mouseover", handleMouseOver);
+    document.documentElement.addEventListener("mouseleave", handleLeave);
 
     return () => {
       window.removeEventListener("mousemove", moveCursor);
       window.removeEventListener("mouseover", handleMouseOver);
+      document.documentElement.removeEventListener("mouseleave", handleLeave);
     };
-  }, [cursorX, cursorY]);
+  }, [hasFinePointer, cursorX, cursorY]);
+
+  if (!hasFinePointer) return null;
 
   return (
     <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-[9999] hidden md:block mix-blend-difference"
+      aria-hidden="true"
+      className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
       style={{
         x: cursorXSpring,
         y: cursorYSpring,
@@ -51,7 +66,7 @@ const CustomCursor = () => {
       <motion.div
         animate={{
           scale: isHovered ? 2.5 : 1,
-          opacity: 1,
+          opacity: isVisible ? 1 : 0,
         }}
         transition={{ duration: 0.2 }}
         className="h-8 w-8 rounded-full overflow-hidden relative bg-white"

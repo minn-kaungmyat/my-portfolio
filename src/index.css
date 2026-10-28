@@ -110,10 +110,13 @@ html.lenis body {
   display: inline-block;
 }
 
-/* Auto glitch for all devices - always active */
+/* Glitch layers are idle by default and only fire on hover; add
+   .glitch-auto to the one heading that should glitch on its own */
 .glitch-text::before,
 .glitch-text::after {
   content: attr(data-text);
+  /* Empty alt text so screen readers don't announce the name three times */
+  content: attr(data-text) / "";
   position: absolute;
   top: 0;
   left: 0;
@@ -124,17 +127,23 @@ html.lenis body {
 }
 
 .glitch-text::before {
-  animation: glitch-auto-1 8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
   color: #00ffff;
   z-index: -1;
   clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
 }
 
 .glitch-text::after {
-  animation: glitch-auto-2 7s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
   color: #ff00ff;
   z-index: -2;
   clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+.glitch-auto::before {
+  animation: glitch-auto-1 8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.glitch-auto::after {
+  animation: glitch-auto-2 7s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
 }
 
 /* Enhanced glitch on hover */
@@ -830,5 +839,141 @@ html.lenis body {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Smoothness + project modal
+   ───────────────────────────────────────────────────────────── */
+
+/* Reserve the scrollbar's space so locking scroll (modal open) doesn't
+   change the page width and make the grid jump / re-animate. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Project card spotlight — driven by CSS vars, no React re-renders */
+.spotlight-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.1),
+    transparent 40%
+  );
+}
+
+/* Card info: touch screens get a caption under the image (nothing covers
+   the screenshot); with a real mouse it becomes a hover / focus overlay */
+.card-overlay {
+  display: none;
+}
+
+.card-caption {
+  display: flex;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spotlight-card:hover::after {
+    opacity: 1;
+  }
+
+  .card-caption {
+    display: none;
+  }
+
+  .card-overlay {
+    display: flex;
+    opacity: 0;
+  }
+
+  .spotlight-card:hover .card-overlay,
+  .project-card:focus-visible .card-overlay {
+    opacity: 1;
+  }
+}
+
+/* Edge fades for the horizontally scrolling filter row */
+.fade-x-right {
+  -webkit-mask-image: linear-gradient(to right, #000 85%, transparent);
+  mask-image: linear-gradient(to right, #000 85%, transparent);
+}
+
+.fade-x-left {
+  -webkit-mask-image: linear-gradient(to left, #000 85%, transparent);
+  mask-image: linear-gradient(to left, #000 85%, transparent);
+}
+
+.fade-x-both {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+}
+
+/* Modal scroll areas: thin, subtle scrollbar */
+.modal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}
+
+.modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Subtle backdrop behind screenshots so letterboxing doesn't look empty */
+.modal-stage {
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(59, 130, 246, 0.06),
+      transparent 70%
+    ),
+    #050505;
+}
+
+/* Only hide the native cursor where the custom one is actually shown */
+@media (hover: hover) and (pointer: fine) {
+  .hide-native-cursor {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch-text::before,
+  .glitch-text::after {
+    animation: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
