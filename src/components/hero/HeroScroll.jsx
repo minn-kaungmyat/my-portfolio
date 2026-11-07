@@ -1,13 +1,13 @@
 import React, { Suspense, lazy, useRef } from "react";
 import {
-  // motion,
+  motion,
   useScroll,
   useTransform,
   useSpring,
   useReducedMotion,
 } from "framer-motion";
 import heroBg from "../../assets/hero-geometric.jpg";
-// import profileImg from "../../assets/profile.jpg";
+import profileImg from "../../assets/profile.jpg";
 import HackerNumber from "../HackerNumber";
 import { projects } from "../../data/projects.mock";
 
@@ -76,18 +76,18 @@ const HeroScroll = () => {
   );
   const statsY = useTransform(smoothProgress, [0, 0.5], ["0%", "6%"]);
 
-  // const profileY = useTransform(smoothProgress, [0, 1], ["0%", "-50%"]);
-  // const profileScale = useTransform(
-  //   smoothProgress,
-  //   [0, 0.5, 1],
-  //   [1, 1.15, 0.9]
-  // );
-  // const profileRotate = useTransform(smoothProgress, [0, 1], [0, -15]);
-  // const profileOpacity = useTransform(
-  //   smoothProgress,
-  //   [0, 0.6, 1],
-  //   [1, 0.8, 0.2]
-  // );
+  const profileY = useTransform(smoothProgress, [0, 1], ["0%", "-50%"]);
+  const profileScale = useTransform(
+    smoothProgress,
+    [0, 0.5, 1],
+    [1, 1.15, 0.9]
+  );
+  const profileRotate = useTransform(smoothProgress, [0, 1], [0, -15]);
+  const profileOpacity = useTransform(
+    smoothProgress,
+    [0, 0.6, 1],
+    [1, 0.8, 0.2]
+  );
 
   return (
     <div
