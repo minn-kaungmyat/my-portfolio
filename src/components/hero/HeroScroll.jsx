@@ -1,13 +1,13 @@
 import React, { Suspense, lazy, useRef } from "react";
 import {
-  motion,
+  // motion,
   useScroll,
   useTransform,
   useSpring,
   useReducedMotion,
 } from "framer-motion";
 import heroBg from "../../assets/hero-geometric.jpg";
-import profileImg from "../../assets/profile.jpg";
+// import profileImg from "../../assets/profile.jpg";
 import HackerNumber from "../HackerNumber";
 import { projects } from "../../data/projects.mock";
 
@@ -41,7 +41,7 @@ const HeroScroll = () => {
   const subtitleOpacity = useTransform(
     smoothProgress,
     [0, 0.6, 1],
-    [1, 0.9, 0.6]
+    [1, 0.9, 0.6],
   );
   const subtitleScale = useTransform(smoothProgress, [0, 1], [1, 1.02]);
 
@@ -50,7 +50,7 @@ const HeroScroll = () => {
   const headingOpacity = useTransform(
     smoothProgress,
     [0, 0.5, 1],
-    [1, 0.85, 0.5]
+    [1, 0.85, 0.5],
   );
   const headingScale = useTransform(smoothProgress, [0, 1], [1, 0.95]);
   const headingRotate = useTransform(smoothProgress, [0, 1], [0, -2]);
@@ -60,7 +60,7 @@ const HeroScroll = () => {
   const descriptionOpacity = useTransform(
     smoothProgress,
     [0, 0.4, 1],
-    [1, 0.7, 0.3]
+    [1, 0.7, 0.3],
   );
   const descriptionScale = useTransform(smoothProgress, [0, 1], [1, 0.92]);
 
@@ -72,22 +72,22 @@ const HeroScroll = () => {
   const statsOpacity = useTransform(
     smoothProgress,
     [0, 0.25, 0.5],
-    [1, 0.6, 0]
+    [1, 0.6, 0],
   );
   const statsY = useTransform(smoothProgress, [0, 0.5], ["0%", "6%"]);
 
-  const profileY = useTransform(smoothProgress, [0, 1], ["0%", "-50%"]);
-  const profileScale = useTransform(
-    smoothProgress,
-    [0, 0.5, 1],
-    [1, 1.15, 0.9]
-  );
-  const profileRotate = useTransform(smoothProgress, [0, 1], [0, -15]);
-  const profileOpacity = useTransform(
-    smoothProgress,
-    [0, 0.6, 1],
-    [1, 0.8, 0.2]
-  );
+  // const profileY = useTransform(smoothProgress, [0, 1], ["0%", "-50%"]);
+  // const profileScale = useTransform(
+  //   smoothProgress,
+  //   [0, 0.5, 1],
+  //   [1, 1.15, 0.9]
+  // );
+  // const profileRotate = useTransform(smoothProgress, [0, 1], [0, -15]);
+  // const profileOpacity = useTransform(
+  //   smoothProgress,
+  //   [0, 0.6, 1],
+  //   [1, 0.8, 0.2]
+  // );
 
   return (
     <div
@@ -139,7 +139,7 @@ const HeroScroll = () => {
               })}
               className="mb-4 text-sm font-medium tracking-[0.2em] text-neutral-400 uppercase"
             >
-              Frontend Developer (Web & Mobile)
+              Frontend & Full-Stack Developer · Web & Mobile
             </motion.span>
 
             <motion.h1
@@ -183,11 +183,12 @@ const HeroScroll = () => {
               })}
               className="text-lg text-neutral-300 max-w-3xl leading-relaxed"
             >
-              Frontend-focused developer with full-stack experience, primarily
-              using React and Flutter. I build web and mobile applications for
-              business, internal tools, and academic projects, with a strong
-              focus on clean UI architecture, responsive design, and
-              maintainable code.
+              Frontend-focused full-stack developer working primarily with React
+              and Flutter, and comfortable across the stack with Node.js,
+              PostgreSQL, and ASP.NET Core. I build web and mobile applications
+              for business, internal tools, and academic projects, from polished
+              interfaces to the APIs and databases behind them, with a focus on
+              clean architecture, responsive design, and maintainable code.
             </motion.p>
           </motion.div>
           {/* <div className="mt-6 flex gap-4">
